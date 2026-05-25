@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}會員登入 - 校園二手書交換平台{% endblock %}
+
+{% block extra_head %}
+<style>
+    .auth-card {
+        max-width: 500px;
+        margin: 4rem auto;
+        background-color: var(--white);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border);
+        padding: 3rem;
+    }
+
+    .auth-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .auth-title {
+        font-size: 2rem;
+        color: var(--dark);
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+    }
+
+    .auth-subtitle {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+    }
+
+    .auth-footer {
+        text-align: center;
+        margin-top: 2rem;
+        font-size: 0.95rem;
+        color: var(--text-muted);
+    }
+
+    .auth-link {
+        color: var(--primary);
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    .auth-link:hover {
+        color: var(--primary-hover);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-card">
+    <div class="auth-header">
+        <h1 class="auth-title"><i class="fa-solid fa-right-to-bracket" style="color: var(--primary);"></i> 會員登入</h1>
+        <p class="auth-subtitle">登入以管理個人書櫃、預約書籍或留言發問</p>
+    </div>
+
+    <form action="{{ url_for('auth.login_action') }}" method="POST">
+        <div class="form-group">
+            <label for="email"><i class="fa-solid fa-envelope"></i> 學校電子信箱</label>
+            <input type="email" id="email" name="email" class="input-control" placeholder="請輸入註冊的學校信箱 (.edu.tw)" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password"><i class="fa-solid fa-lock"></i> 密碼</label>
+            <input type="password" id="password" name="password" class="input-control" placeholder="請輸入密碼" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 0.85rem;">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i> 安全登入
+        </button>
+    </form>
+
+    <div class="auth-footer">
+        還沒有帳號嗎？ <a href="{{ url_for('auth.register_page') }}" class="auth-link">點此註冊</a>
+    </div>
+</div>
+{% endblock %}

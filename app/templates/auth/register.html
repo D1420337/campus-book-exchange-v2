@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}註冊新帳號 - 校園二手書交換平台{% endblock %}
+
+{% block extra_head %}
+<style>
+    .auth-card {
+        max-width: 500px;
+        margin: 4rem auto;
+        background-color: var(--white);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border);
+        padding: 3rem;
+    }
+
+    .auth-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .auth-title {
+        font-size: 2rem;
+        color: var(--dark);
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+    }
+
+    .auth-subtitle {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+    }
+
+    .auth-footer {
+        text-align: center;
+        margin-top: 2rem;
+        font-size: 0.95rem;
+        color: var(--text-muted);
+    }
+
+    .auth-link {
+        color: var(--primary);
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    .auth-link:hover {
+        color: var(--primary-hover);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-card">
+    <div class="auth-header">
+        <h1 class="auth-title"><i class="fa-solid fa-user-plus" style="color: var(--primary);"></i> 註冊新帳號</h1>
+        <p class="auth-subtitle">加入二手書社群，開啟省錢又環保的二手書旅程</p>
+    </div>
+
+    <form action="{{ url_for('auth.register_action') }}" method="POST">
+        <div class="form-group">
+            <label for="username"><i class="fa-solid fa-user"></i> 同學名稱 / 暱稱 <span style="color: var(--danger);">*</span></label>
+            <input type="text" id="username" name="username" class="input-control" placeholder="例如：張同學 / 小明" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email"><i class="fa-solid fa-envelope"></i> 學校電子信箱 <span style="color: var(--danger);">*</span></label>
+            <input type="email" id="email" name="email" class="input-control" placeholder="請填入您的學校信箱 (需以 .edu.tw 結尾)" required>
+            <small style="color: var(--text-muted); font-size: 0.85rem; display: block; margin-top: 0.25rem;">
+                <i class="fa-solid fa-circle-info"></i> 本平台僅限同校師生交易，註冊信箱必須為結尾是 <strong>.edu.tw</strong> 的教育網域。
+            </small>
+        </div>
+
+        <div class="form-group">
+            <label for="password"><i class="fa-solid fa-lock"></i> 密碼 <span style="color: var(--danger);">*</span></label>
+            <input type="password" id="password" name="password" class="input-control" placeholder="請設定 8 位數以上的密碼" minlength="8" required>
+        </div>
+
+        <div class="form-group">
+            <label for="contact_info"><i class="fa-brands fa-line"></i> 聯絡方式 / Line ID</label>
+            <input type="text" id="contact_info" name="contact_info" class="input-control" placeholder="選填。例如 Line ID: user123 (僅在預約成功後安全揭露)">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 0.85rem;">
+            <i class="fa-solid fa-user-check"></i> 立即註冊並發送驗證碼
+        </button>
+    </form>
+
+    <div class="auth-footer">
+        已有帳號？ <a href="{{ url_for('auth.login_page') }}" class="auth-link">點此登入</a>
+    </div>
+</div>
+{% endblock %}

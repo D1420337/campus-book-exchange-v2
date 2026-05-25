@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}驗證電子信箱 - 校園二手書交換平台{% endblock %}
+
+{% block extra_head %}
+<style>
+    .auth-card {
+        max-width: 500px;
+        margin: 4rem auto;
+        background-color: var(--white);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border);
+        padding: 3rem;
+    }
+
+    .auth-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .auth-title {
+        font-size: 2rem;
+        color: var(--dark);
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+    }
+
+    .auth-subtitle {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+    }
+
+    .verification-box {
+        background-color: var(--primary-light);
+        border: 1px dashed var(--primary);
+        border-radius: var(--radius-md);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .verification-code-input {
+        letter-spacing: 0.5rem;
+        text-align: center;
+        font-size: 1.75rem;
+        font-weight: 800;
+        font-family: monospace;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-card">
+    <div class="auth-header">
+        <h1 class="auth-title"><i class="fa-solid fa-envelope-circle-check" style="color: var(--primary);"></i> 驗證電子信箱</h1>
+        <p class="auth-subtitle">開通帳號以開始發送預約與留言</p>
+    </div>
+
+    <div class="verification-box">
+        <p style="color: var(--primary-dark); font-weight: 700; margin-bottom: 0.5rem;"><i class="fa-solid fa-code"></i> 開發模擬說明</p>
+        <p style="font-size: 0.9rem; color: var(--text-main); line-height: 1.5;">
+            為因應校園系統的輕量開發，我們並未設定真實郵件伺服器。<strong>6 位數驗證碼已輸出在您運行 Flask 伺服器的終端機/控制台（Terminal Console）日誌中</strong>。請前往終端機查看並複製驗證碼。
+        </p>
+    </div>
+
+    <form action="{{ url_for('auth.verify_action') }}" method="POST">
+        <input type="hidden" name="email" value="{{ email }}">
+        
+        <div class="form-group">
+            <label for="email-display"><i class="fa-solid fa-user-tag"></i> 驗證電子信箱</label>
+            <input type="text" id="email-display" class="input-control" value="{{ email }}" disabled style="background-color: var(--light); color: var(--text-muted); cursor: not-allowed;">
+        </div>
+
+        <div class="form-group">
+            <label for="verification_code" style="text-align: center; display: block; font-weight: 800; color: var(--dark);"><i class="fa-solid fa-key"></i> 請輸入 6 位數驗證碼</label>
+            <input type="text" id="verification_code" name="verification_code" class="input-control verification-code-input" placeholder="000000" maxlength="6" pattern="[0-9]{6}" required autocomplete="off">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 0.85rem;">
+            <i class="fa-solid fa-circle-check"></i> 驗證開通帳號
+        </button>
+    </form>
+
+    <div style="text-align: center; margin-top: 2rem; font-size: 0.95rem;">
+        <a href="{{ url_for('auth.register_page') }}" style="color: var(--primary); font-weight: 700;"><i class="fa-solid fa-arrow-left"></i> 返回重新註冊</a>
+    </div>
+</div>
+{% endblock %}
