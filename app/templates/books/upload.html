@@ -84,16 +84,8 @@
             <!-- 適用系所 -->
             <div class="form-group">
                 <label for="dept">適用系所</label>
-                <select id="dept" name="dept" class="input-control">
-                    <option value="">-- 請選擇適用系所（選填） --</option>
-                    <option value="資訊工程學系">資訊工程學系</option>
-                    <option value="電機工程學系">電機工程學系</option>
-                    <option value="企業管理學系">企業管理學系</option>
-                    <option value="財務金融學系">財務金融學系</option>
-                    <option value="外國語文學系">外國語文學系</option>
-                    <option value="機械工程學系">機械工程學系</option>
-                    <option value="其他系所">其他系所/通識課程</option>
-                </select>
+                <input type="text" id="dept" name="dept" class="input-control" placeholder="例如：資訊工程學系、通識課程（選填）"
+                       value="{{ form_data.dept if form_data else '' }}">
             </div>
 
             <!-- 適用科目 -->

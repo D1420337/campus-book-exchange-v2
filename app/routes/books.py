@@ -22,9 +22,9 @@ def search():
     # Base query - only show Available books
     book_query = Book.query.filter_by(status='Available')
     
-    # 1. 精確篩選：系所 (dept)
+    # 1. 模糊篩選：系所 (dept)
     if dept:
-        book_query = book_query.filter_by(dept=dept)
+        book_query = book_query.filter(Book.dept.ilike(f"%{dept}%"))
         
     # 2. 精確篩選：ISBN
     if isbn:
