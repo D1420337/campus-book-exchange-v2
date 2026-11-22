@@ -49,11 +49,81 @@ def create_app():
         from flask import redirect, url_for
         return redirect(url_for('cabinet.index'))
 
-    # Automatically create database tables if they do not exist
+    # Automatically create database tables if they do not exist, and seed initial data if empty
     with app.app_context():
         db.create_all()
+        seed_initial_data()
 
     return app
+
+def seed_initial_data():
+    from app.models.user import User
+    from app.models.book import Book
+
+    # If users table is empty, seed demo accounts
+    if User.query.count() == 0:
+        demo_user = User(
+            email='d1420337@o365.fcu.edu.tw',
+            username='小明',
+            contact_info='Line ID: fcu_book_demo',
+            is_verified=True,
+            password_hash='scrypt:32768:8:1$D1eFV6mbXNUtNNey$fd5706847b29ca1094ec3180f728c921d86ebc2bdda4a03e568f8fd4971c8ea822a8c81bf51cb73e6863d2fbc4393cbe85ba0d221e7271ee5749df6319df8c45'
+        )
+        buyer_user = User(
+            email='test1@o365.fcu.edu.tw',
+            username='張同學',
+            contact_info='0912345678',
+            is_verified=True,
+            password_hash='scrypt:32768:8:1$b9EoO2VNE236U7ne$42125bf73f1d165f3c2c32ab9a1d9e9e7e79807b01f55f8e7e3a378b166f47f6e8454fe4a8cf0b502730a3c9974157617996a836c7ff54a32c287c383459e213'
+        )
+        db.session.add(demo_user)
+        db.session.add(buyer_user)
+        db.session.commit()
+
+    # If books table is empty, seed sample books
+    if Book.query.count() == 0:
+        seller = User.query.filter_by(email='d1420337@o365.fcu.edu.tw').first()
+        if seller:
+            book1 = Book(
+                seller_id=seller.id,
+                title='我是誰?一本小書也是一本大書',
+                author='逢甲大學國語文教學中心',
+                publisher='五南圖書出版公司',
+                isbn='978-626-393-666-9(836)',
+                price=150,
+                is_exchange=False,
+                exchange_item='',
+                condition='接近全新',
+                description='無劃記，書況良好。',
+                image_url='/static/uploads/1780927288_0_13502.jpg,/static/uploads/1780927288_1_13504.jpg,/static/uploads/1780927288_2_13503.jpg',
+                status='Available',
+                dept='各學系',
+                subject='中文思辨與表達',
+                publish_year='2024',
+                edition='修訂一版'
+            )
+            book2 = Book(
+                seller_id=seller.id,
+                title='管理學概論',
+                author='李慶芳、陳可杰、蔡敦浩',
+                publisher='滄海書局',
+                isbn='978-626-97291-5-9',
+                price=250,
+                is_exchange=False,
+                exchange_item='',
+                condition='輕微劃記',
+                description='有用鉛筆畫記過，書況尚好。',
+                image_url='/static/uploads/1780927674_0_13501.jpg',
+                status='Available',
+                dept='經濟學系',
+                subject='管理學',
+                publish_year='2023',
+                edition='第二版'
+            )
+            db.session.add(book1)
+            db.session.add(book2)
+            db.session.commit()
+
 
 # Expose app instance at package level so both `gunicorn app:app` and `gunicorn "app:create_app()"` work
 app = create_app()
