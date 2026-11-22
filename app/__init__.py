@@ -54,3 +54,7 @@ def create_app():
         db.create_all()
 
     return app
+
+# Expose app instance at package level so both `gunicorn app:app` and `gunicorn "app:create_app()"` work
+app = create_app()
+
