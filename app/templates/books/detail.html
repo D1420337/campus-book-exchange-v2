@@ -149,11 +149,23 @@
     <div class="detail-img-section">
         <div class="detail-img-wrapper">
             {% if book.image_url %}
-                <img src="{{ book.image_url }}" alt="{{ book.title }}" class="detail-img">
+                {% set images = book.image_url.split(',') %}
+                <img src="{{ images[0] }}" alt="{{ book.title }}" class="detail-img" id="main-detail-img">
             {% else %}
                 <i class="fa-solid fa-book" style="font-size: 8rem; color: var(--text-muted);"></i>
             {% endif %}
         </div>
+        
+        {% if book.image_url and book.image_url.split(',')|length > 1 %}
+            <div style="display: flex; gap: 0.5rem; justify-content: center; margin-top: 0.5rem;">
+                {% for img in book.image_url.split(',') %}
+                    <img src="{{ img }}" alt="書況縮圖" 
+                         style="width: 60px; height: 60px; object-fit: contain; border-radius: var(--radius-sm); border: 1px solid var(--border); cursor: pointer; background-color: var(--light);"
+                         onclick="document.getElementById('main-detail-img').src = this.src; document.querySelectorAll('.thumbnail-img').forEach(el => el.style.borderColor='var(--border)'); this.style.borderColor='var(--primary)';"
+                         class="thumbnail-img">
+                {% endfor %}
+            </div>
+        {% endif %}
         
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
             <span class="tag-item tag-dept" style="padding: 0.4rem 1rem; font-size: 0.9rem;">

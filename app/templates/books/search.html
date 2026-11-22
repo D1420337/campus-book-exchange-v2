@@ -241,7 +241,7 @@
                         <!-- 書籍封面 -->
                         <div class="card-img-wrapper">
                             {% if book.image_url %}
-                                <img src="{{ book.image_url }}" alt="{{ book.title }}" class="card-img">
+                                <img src="{{ book.image_url.split(',')[0] }}" alt="{{ book.title }}" class="card-img">
                             {% else %}
                                 <i class="fa-solid fa-book" style="font-size: 4rem; color: var(--text-muted);"></i>
                             {% endif %}

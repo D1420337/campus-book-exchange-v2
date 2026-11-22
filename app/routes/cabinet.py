@@ -105,36 +105,46 @@ def edit_action(book_id):
             flash('請輸入有效的出售價格。', 'danger')
             return render_template('cabinet/edit.html', book=book)
             
-    # 處理選擇性圖片修改
+    # 處理選擇性圖片修改（支援多張上傳，至多 3 張）
     image_url = book.image_url
-    file = request.files.get('book_image')
-    if file and file.filename != '':
-        # 圖片 2MB 大小限制
-        file.seek(0, os.SEEK_END)
-        file_size = file.tell()
-        file.seek(0)
+    from werkzeug.utils import secure_filename
+    from time import time
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+    
+    files = request.files.getlist('book_image')
+    valid_files = [f for f in files if f and f.filename != '']
+    
+    if valid_files:
+        if len(valid_files) > 3:
+            flash('上傳的圖片數量超過限制，至多僅能上傳 3 張書況照片。', 'danger')
+            return render_template('cabinet/edit.html', book=book)
         
-        if file_size > 2 * 1024 * 1024:
-            flash('上傳的圖片檔案過大，限制在 2MB 以內。', 'danger')
-            return render_template('cabinet/edit.html', book=book)
+        image_urls = []
+        for idx, file in enumerate(valid_files):
+            file.seek(0, os.SEEK_END)
+            file_size = file.tell()
+            file.seek(0)
             
-        from werkzeug.utils import secure_filename
-        from time import time
-        ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
-        ext = file.filename.rsplit('.', 1)[1].lower() if '.' in file.filename else ''
-        if ext not in ALLOWED_EXTENSIONS:
-            flash('不支援的圖片格式。', 'danger')
-            return render_template('cabinet/edit.html', book=book)
+            if file_size > 2 * 1024 * 1024:
+                flash(f'第 {idx+1} 張圖片檔案過大，限制在 2MB 以內。', 'danger')
+                return render_template('cabinet/edit.html', book=book)
+                
+            ext = file.filename.rsplit('.', 1)[1].lower() if '.' in file.filename else ''
+            if ext not in ALLOWED_EXTENSIONS:
+                flash(f'第 {idx+1} 張圖片格式不支援。', 'danger')
+                return render_template('cabinet/edit.html', book=book)
+                
+            upload_folder = os.path.join('app', 'static', 'uploads')
+            if not os.path.exists(upload_folder):
+                os.makedirs(upload_folder)
+                
+            filename = secure_filename(file.filename)
+            unique_filename = f"{int(time())}_{idx}_{filename}"
+            file_path = os.path.join(upload_folder, unique_filename)
+            file.save(file_path)
+            image_urls.append(f"/static/uploads/{unique_filename}")
             
-        upload_folder = os.path.join('app', 'static', 'uploads')
-        if not os.path.exists(upload_folder):
-            os.makedirs(upload_folder)
-            
-        filename = secure_filename(file.filename)
-        unique_filename = f"{int(time())}_{filename}"
-        file_path = os.path.join(upload_folder, unique_filename)
-        file.save(file_path)
-        image_url = f"/static/uploads/{unique_filename}"
+        image_url = ",".join(image_urls)
         
     try:
         book.update(

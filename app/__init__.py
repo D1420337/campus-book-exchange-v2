@@ -18,6 +18,16 @@ def create_app():
     # Initialize db
     db.init_app(app)
 
+    # Configure SQLite to use WAL mode and busy_timeout to avoid database locking/exclusive lock issues
+    with app.app_context():
+        from sqlalchemy import event
+        @event.listens_for(db.engine, "connect")
+        def set_sqlite_pragma(dbapi_connection, connection_record):
+            cursor = dbapi_connection.cursor()
+            cursor.execute("PRAGMA journal_mode=WAL")
+            cursor.execute("PRAGMA busy_timeout=5000")
+            cursor.close()
+
     # Register blueprints
     app.register_blueprint(auth_bp)
     app.register_blueprint(books_bp)

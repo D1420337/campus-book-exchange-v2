@@ -113,22 +113,31 @@ def upload_action():
             flash('請輸入有效的出售價格。', 'danger')
             return render_template('books/upload.html', form_data=request.form)
 
-    # 4. 處理圖片上傳與限制 (限制在 2MB 以內)
-    image_url = None
-    file = request.files.get('book_image')
+    # 4. 處理圖片上傳與限制 (限制在 2MB 以內，支援多張上傳，至多 3 張)
+    image_urls = []
+    files = request.files.getlist('book_image')
+    valid_files = [f for f in files if f and f.filename != '']
     
-    if file and file.filename != '':
+    if not valid_files:
+        flash('上架書籍必須上傳至少一張封面照。', 'danger')
+        return render_template('books/upload.html', form_data=request.form)
+        
+    if len(valid_files) > 3:
+        flash('上傳的圖片數量超過限制，至多僅能上傳 3 張書況照片。', 'danger')
+        return render_template('books/upload.html', form_data=request.form)
+        
+    for idx, file in enumerate(valid_files):
         # 檢查檔案大小限制
         file.seek(0, os.SEEK_END)
         file_size = file.tell()
         file.seek(0)
         
         if file_size > 2 * 1024 * 1024:
-            flash('上傳的圖片檔案過大，限制在 2MB 以內。', 'danger')
+            flash(f'第 {idx+1} 張圖片檔案過大，限制在 2MB 以內。', 'danger')
             return render_template('books/upload.html', form_data=request.form)
             
         if not allowed_file(file.filename):
-            flash('不支援的圖片格式，請上傳 PNG, JPG, JPEG, GIF 或 WEBP。', 'danger')
+            flash(f'第 {idx+1} 張圖片格式不支援，請上傳 PNG, JPG, JPEG, GIF 或 WEBP。', 'danger')
             return render_template('books/upload.html', form_data=request.form)
 
         # 安全儲存
@@ -137,14 +146,13 @@ def upload_action():
             os.makedirs(upload_folder)
             
         filename = secure_filename(file.filename)
-        unique_filename = f"{int(time())}_{filename}"
+        unique_filename = f"{int(time())}_{idx}_{filename}"
         file_path = os.path.join(upload_folder, unique_filename)
         file.save(file_path)
         
-        image_url = f"/static/uploads/{unique_filename}"
-    else:
-        flash('上架書籍必須上傳至少一張封面照。', 'danger')
-        return render_template('books/upload.html', form_data=request.form)
+        image_urls.append(f"/static/uploads/{unique_filename}")
+        
+    image_url = ",".join(image_urls)
 
     # 5. 寫入資料庫
     try:

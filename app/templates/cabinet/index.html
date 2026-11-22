@@ -228,7 +228,7 @@
                 <div class="cabinet-card">
                     <div style="height: 180px; background-color: var(--light); display: flex; align-items: center; justify-content: center; position: relative; border-bottom: 1px solid var(--border);">
                         {% if book.image_url %}
-                            <img src="{{ book.image_url }}" alt="{{ book.title }}" style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                            <img src="{{ book.image_url.split(',')[0] }}" alt="{{ book.title }}" style="max-height: 100%; max-width: 100%; object-fit: contain;">
                         {% else %}
                             <i class="fa-solid fa-book" style="font-size: 3.5rem; color: var(--text-muted);"></i>
                         {% endif %}
@@ -272,7 +272,7 @@
                 <div class="cabinet-card" style="border: 1.5px solid var(--success);">
                     <div style="height: 180px; background-color: var(--light); display: flex; align-items: center; justify-content: center; position: relative; border-bottom: 1px solid var(--border);">
                         {% if book.image_url %}
-                            <img src="{{ book.image_url }}" alt="{{ book.title }}" style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                            <img src="{{ book.image_url.split(',')[0] }}" alt="{{ book.title }}" style="max-height: 100%; max-width: 100%; object-fit: contain;">
                         {% else %}
                             <i class="fa-solid fa-book" style="font-size: 3.5rem; color: var(--text-muted);"></i>
                         {% endif %}
@@ -322,7 +322,7 @@
                 <div class="cabinet-card" style="opacity: 0.8;">
                     <div style="height: 180px; background-color: var(--light); display: flex; align-items: center; justify-content: center; position: relative; border-bottom: 1px solid var(--border);">
                         {% if book.image_url %}
-                            <img src="{{ book.image_url }}" alt="{{ book.title }}" style="max-height: 100%; max-width: 100%; object-fit: contain; filter: grayscale(100%);">
+                            <img src="{{ book.image_url.split(',')[0] }}" alt="{{ book.title }}" style="max-height: 100%; max-width: 100%; object-fit: contain; filter: grayscale(100%);">
                         {% else %}
                             <i class="fa-solid fa-book" style="font-size: 3.5rem; color: var(--text-muted);"></i>
                         {% endif %}
