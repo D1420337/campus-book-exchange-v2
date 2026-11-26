@@ -67,14 +67,14 @@ def seed_initial_data():
             username='小明',
             contact_info='Line ID: fcu_book_demo',
             is_verified=True,
-            password_hash='scrypt:32768:8:1$J4BnGI9moC6EXKES$c1d4a4557aa1008c1ceebbbd7141700355529ef55c097f55b6aad4e7157b3dab3968dd762d44b500fc339749d7f8cc8bcc03bcc799a8ec1e7de1361eea21000c'
+            password_hash='scrypt:32768:8:1$Oktb2fmVywgsF04z$67cbf996224a26d393b5b0887104bbccc2c80019468d92d6a2f040ba4993e163ea04afce8a5c8cb59e74a431a86839f020ef0346e14716a1a78d798cf1308aa3'
         )
         buyer_user = User(
             email='test1@o365.fcu.edu.tw',
             username='張同學',
             contact_info='0912345678',
             is_verified=True,
-            password_hash='scrypt:32768:8:1$J4BnGI9moC6EXKES$c1d4a4557aa1008c1ceebbbd7141700355529ef55c097f55b6aad4e7157b3dab3968dd762d44b500fc339749d7f8cc8bcc03bcc799a8ec1e7de1361eea21000c'
+            password_hash='scrypt:32768:8:1$IlKx6XgYyPjJYKdm$03619a49da04784f399e8bd1475606e4da75b0b268ba41f763b73545eb62d623c63a7c5a6292c535250571e81e65d27de13de65934d741dfbf2eb1b7d97a2147'
         )
         db.session.add(demo_user)
         db.session.add(buyer_user)
